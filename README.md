@@ -37,35 +37,38 @@ python -m venv venv
 
 # Install dependencies
 pip install -r requirements.txt
+```
 🗄️ Database Setup
 Run these SQL scripts in order using SQL Developer or SQL*Plus:
 
-bash
+```bash
 sqlplus system/your_password@localhost:1521/ORCL @database/01_schema.sql
 sqlplus system/your_password@localhost:1521/ORCL @database/02_triggers.sql
 sqlplus system/your_password@localhost:1521/ORCL @database/03_sample_data.sql
 sqlplus system/your_password@localhost:1521/ORCL @database/04_reports.sql
+```
 ⚙️ Configuration
 Update app.py with your database credentials:
 
-python
+```python
 DB_CONFIG = {
     'user': 'system',
     'password': 'your_password',
     'dsn': 'localhost:1521/ORCL'
 }
 🏃 Running the App
-bash
+```
+```bash
 python app.py
 Access at: http://localhost:5000
-
+```
 🔑 Default Users
 Role	Username	Password
 Admin	admin1	hash_admin123
 Teacher	teacher1	hash_teacher123
 Student	student1	hash_student123
 📁 Project Structure
-text
+```text
 controlled-messaging-system/
 ├── app.py                 # Main Flask application
 ├── requirements.txt       # Python dependencies
@@ -76,3 +79,4 @@ controlled-messaging-system/
 │   └── 04_reports.sql     # Views and procedures
 ├── templates/             # HTML templates
 └── static/                # CSS and JS files
+```
