@@ -62,13 +62,6 @@ DB_CONFIG = {
 python app.py
 ```
 Access at: http://localhost:5000
-```table
-🔑 Default Users
-Role	Username	Password
-Admin	admin1	hash_admin123
-Teacher	teacher1	hash_teacher123
-Student	student1	hash_student123
-```
 📁 Project Structure
 ```text
 controlled-messaging-system/
