@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox - Messaging System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>📧 CIMS</h2>
+                <p>Welcome, {{ session.full_name }}</p>
+                <span class="role-badge role-{{ session.role.lower() }}">{{ session.role }}</span>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li><a href="{{ url_for('dashboard') }}">📊 Dashboard</a></li>
+                <li><a href="{{ url_for('inbox') }}" class="active">📥 Inbox</a></li>
+                <li><a href="{{ url_for('send_message') }}">✉️ Send Message</a></li>
+                {% if session.role == 'ADMIN' %}
+                <li><a href="{{ url_for('reports') }}">📈 Reports</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+            </ul>
+        </nav>
+        
+        <main class="dashboard-main">
+            <header class="dashboard-header">
+                <h1>Inbox</h1>
+                <div class="header-actions">
+                    <button onclick="refreshInbox()" class="btn-refresh">🔄 Refresh</button>
+                </div>
+            </header>
+            
+            <div class="dashboard-content">
+                {% if messages %}
+                <table class="messages-table">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Subject</th>
+                            <th>From</th>
+                            <th>Department</th>
+                            <th>Received</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for msg in messages %}
+                        <tr class="{% if msg[5] == 'sent' %}unread{% endif %} priority-{{ msg[6].lower() }}">
+                            <td>
+                                {% if msg[5] == 'sent' %}
+                                <span class="status-dot unread" title="Unread">●</span>
+                                {% else %}
+                                <span class="status-dot read" title="Read">○</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="priority-badge priority-{{ msg[6].lower() }}">
+                                    {{ msg[6] }}
+                                </span>
+                            </td>
+                            <td class="subject-cell">
+                                <a href="{{ url_for('view_message', message_id=msg[0]) }}">
+                                    {{ msg[1] }}
+                                </a>
+                            </td>
+                            <td>{{ msg[2] }}</td>
+                            <td>{{ msg[7] }}</td>
+                            <td>{{ msg[3].strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="{{ url_for('view_message', message_id=msg[0]) }}" 
+                                       class="btn-view">View</a>
+                                    <button onclick="archiveMessage({{ msg[0] }})" 
+                                            class="btn-archive">Archive</button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <p>📭 Your inbox is empty</p>
+                    <a href="{{ url_for('send_message') }}" class="btn btn-primary">
+                        Send a Message
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

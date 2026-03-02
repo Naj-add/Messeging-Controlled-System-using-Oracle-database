@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controlled Internal Messaging System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📧 Controlled Internal Messaging System</h1>
+            <p>Secure communication for academic institutions</p>
+        </header>
+        
+        <main>
+            <div class="hero">
+                <div class="hero-content">
+                    <h2>Welcome to the Internal Messaging System</h2>
+                    <p>A secure platform for communication between students, teachers, and administrative staff.</p>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <span class="feature-icon">🔒</span>
+                            <h3>Secure Communication</h3>
+                            <p>End-to-end encrypted messages with role-based access control</p>
+                        </div>
+                        
+                        <div class="feature">
+                            <span class="feature-icon">📊</span>
+                            <h3>Message Tracking</h3>
+                            <p>Track message status with read receipts and timestamps</p>
+                        </div>
+                        
+                        <div class="feature">
+                            <span class="feature-icon">👥</span>
+                            <h3>Role-Based Rules</h3>
+                            <p>Enforced communication rules based on user roles</p>
+                        </div>
+                        
+                        <div class="feature">
+                            <span class="feature-icon">📈</span>
+                            <h3>Analytics & Reports</h3>
+                            <p>Comprehensive messaging activity reports for administrators</p>
+                        </div>
+                    </div>
+                    
+                    <div class="cta-buttons">
+                        <a href="{{ url_for('login') }}" class="btn btn-primary">Login to System</a>
+                        <a href="#about" class="btn btn-secondary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="about" class="about-section">
+                <h2>About the System</h2>
+                <div class="about-content">
+                    <h3>Key Features:</h3>
+                    <ul>
+                        <li>Secure message exchange with Oracle Database backend</li>
+                        <li>Role-based communication rules enforcement</li>
+                        <li>Real-time message status tracking (sent, read, archived)</li>
+                        <li>Comprehensive audit trail for compliance</li>
+                        <li>Analytical views for communication patterns</li>
+                        <li>Department-based messaging restrictions</li>
+                    </ul>
+                    
+                    <h3>System Requirements:</h3>
+                    <ul>
+                        <li>Oracle Database for secure data storage</li>
+                        <li>Role-based access control with database triggers</li>
+                        <li>Multi-factor authentication ready</li>
+                        <li>Responsive web interface for all devices</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>&copy; 2024 Academic Institution - Controlled Internal Messaging System</p>
+            <p>Version 1.0 | Secure | Reliable | Compliant</p>
+        </footer>
+    </div>
+</body>
+</html>

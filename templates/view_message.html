@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Message - Messaging System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>📧 CIMS</h2>
+                <p>Welcome, {{ session.full_name }}</p>
+                <span class="role-badge role-{{ session.role.lower() }}">{{ session.role }}</span>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li><a href="{{ url_for('dashboard') }}">📊 Dashboard</a></li>
+                <li><a href="{{ url_for('inbox') }}">📥 Inbox</a></li>
+                <li><a href="{{ url_for('send_message') }}">✉️ Send Message</a></li>
+                {% if session.role == 'ADMIN' %}
+                <li><a href="{{ url_for('reports') }}">📈 Reports</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+            </ul>
+        </nav>
+        
+        <main class="dashboard-main">
+            <header class="dashboard-header">
+                <h1>Message Details</h1>
+                <div class="header-actions">
+                    <a href="{{ url_for('inbox') }}" class="btn-back">← Back to Inbox</a>
+                </div>
+            </header>
+            
+            <div class="dashboard-content">
+                <div class="message-view">
+                    <div class="message-header">
+                        <h2>{{ message.subject }}</h2>
+                        <div class="message-meta">
+                            <span class="priority-badge priority-{{ message.priority.lower() }}">
+                                {{ message.priority }} Priority
+                            </span>
+                            <span class="status-badge status-{{ message.status }}">
+                                {{ message.status }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="message-info">
+                        <div class="info-row">
+                            <span class="info-label">From:</span>
+                            <span class="info-value">{{ message.sender_name }} ({{ message.sender_dept }})</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">To:</span>
+                            <span class="info-value">{{ message.receiver_name }} ({{ message.receiver_dept }})</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Sent:</span>
+                            <span class="info-value">{{ message.sent_date.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                        </div>
+                        {% if message.read_date %}
+                        <div class="info-row">
+                            <span class="info-label">Read:</span>
+                            <span class="info-value">{{ message.read_date.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="message-body">
+                        {{ message.body|safe }}
+                    </div>
+                    
+                    <div class="message-actions">
+                        <a href="{{ url_for('send_message') }}?reply_to={{ message.id }}" 
+                           class="btn btn-primary">Reply</a>
+                        <button onclick="archiveMessage({{ message.id }})" class="btn btn-secondary">
+                            Archive
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

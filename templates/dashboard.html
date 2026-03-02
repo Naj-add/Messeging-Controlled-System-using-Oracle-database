@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Messaging System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>📧 CIMS</h2>
+                <p>Welcome, {{ user.full_name }}</p>
+                <span class="role-badge role-{{ user.role.lower() }}">{{ user.role }}</span>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li><a href="{{ url_for('dashboard') }}" class="active">📊 Dashboard</a></li>
+                <li><a href="{{ url_for('inbox') }}">📥 Inbox 
+                    {% if unread_count > 0 %}
+                    <span class="badge">{{ unread_count }}</span>
+                    {% endif %}
+                </a></li>
+                <li><a href="{{ url_for('send_message') }}">✉️ Send Message</a></li>
+                {% if user.role == 'ADMIN' %}
+                <li><a href="{{ url_for('reports') }}">📈 Reports</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+            </ul>
+        </nav>
+        
+        <main class="dashboard-main">
+            <header class="dashboard-header">
+                <h1>Dashboard</h1>
+                <div class="user-info">
+                    <span>{{ user.full_name }}</span>
+                </div>
+            </header>
+            
+            <div class="dashboard-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📨</div>
+                        <div class="stat-details">
+                            <h3>Unread Messages</h3>
+                            <p class="stat-number">{{ unread_count }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">⏰</div>
+                        <div class="stat-details">
+                            <h3>Last Login</h3>
+                            <p class="stat-text">Today</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">🏢</div>
+                        <div class="stat-details">
+                            <h3>Department</h3>
+                            <p class="stat-text">Administration</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="recent-messages">
+                    <h2>Recent Messages</h2>
+                    {% if recent_messages %}
+                    <table class="messages-table">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>From</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for msg in recent_messages %}
+                            <tr class="priority-{{ msg[5].lower() }}">
+                                <td>{{ msg[1] }}</td>
+                                <td>{{ msg[2] }}</td>
+                                <td>{{ msg[3].strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ msg[4] }}">
+                                        {{ msg[4] }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="priority-badge priority-{{ msg[5] }}">
+                                        {{ msg[5] }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('view_message', message_id=msg[0]) }}" 
+                                       class="btn-view">View</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="no-messages">No messages to display</p>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

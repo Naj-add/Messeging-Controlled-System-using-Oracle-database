@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Messaging System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>📧 CIMS</h2>
+                <p>Welcome, {{ session.full_name }}</p>
+                <span class="role-badge role-{{ session.role.lower() }}">{{ session.role }}</span>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li><a href="{{ url_for('dashboard') }}">📊 Dashboard</a></li>
+                <li><a href="{{ url_for('inbox') }}">📥 Inbox</a></li>
+                <li><a href="{{ url_for('send_message') }}">✉️ Send Message</a></li>
+                <li><a href="{{ url_for('reports') }}" class="active">📈 Reports</a></li>
+                <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+            </ul>
+        </nav>
+        
+        <main class="dashboard-main">
+            <header class="dashboard-header">
+                <h1>Messaging Analytics & Reports</h1>
+            </header>
+            
+            <div class="dashboard-content">
+                <div class="reports-section">
+                    <h2>User Message Statistics</h2>
+                    <table class="reports-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Messages Sent</th>
+                                <th>Messages Received</th>
+                                <th>Messages Read</th>
+                                <th>Avg Response Time (min)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stat in user_stats %}
+                            <tr>
+                                <td>{{ stat[2] }}</td>
+                                <td>{{ stat[3] }}</td>
+                                <td>{{ stat[4] }}</td>
+                                <td>{{ stat[5] }}</td>
+                                <td>{{ stat[6] }}</td>
+                                <td>{{ stat[7] if stat[7] else 'N/A' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="reports-section">
+                    <h2>Daily Message Activity (Last 30 Days)</h2>
+                    <canvas id="dailyActivityChart"></canvas>
+                    <table class="reports-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Total</th>
+                                <th>Urgent</th>
+                                <th>High Priority</th>
+                                <th>Normal</th>
+                                <th>Unique Senders</th>
+                                <th>Unique Receivers</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for activity in daily_activity %}
+                            <tr>
+                                <td>{{ activity[0].strftime('%Y-%m-%d') }}</td>
+                                <td>{{ activity[1] }}</td>
+                                <td>{{ activity[2] }}</td>
+                                <td>{{ activity[3] }}</td>
+                                <td>{{ activity[4] }}</td>
+                                <td>{{ activity[5] }}</td>
+                                <td>{{ activity[6] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="reports-section">
+                    <h2>Department Communication Matrix</h2>
+                    <table class="reports-table">
+                        <thead>
+                            <tr>
+                                <th>From Department</th>
+                                <th>To Department</th>
+                                <th>Message Count</th>
+                                <th>Read Rate (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for comm in dept_comm %}
+                            <tr>
+                                <td>{{ comm[0] }}</td>
+                                <td>{{ comm[1] }}</td>
+                                <td>{{ comm[2] }}</td>
+                                <td>{{ "%.2f"|format(comm[3]) }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Chart initialization
+        const ctx = document.getElementById('dailyActivityChart').getContext('2d');
+        const dailyData = {{ daily_activity|tojson }};
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dailyData.map(d => d[0].substring(0, 10)),
+                datasets: [{
+                    label: 'Total Messages',
+                    data: dailyData.map(d => d[1]),
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }, {
+                    label: 'Urgent Messages',
+                    data: dailyData.map(d => d[2]),
+                    borderColor: 'rgb(255, 99, 132)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
