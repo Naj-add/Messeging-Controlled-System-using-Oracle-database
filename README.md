@@ -56,12 +56,13 @@ DB_CONFIG = {
     'password': 'your_password',
     'dsn': 'localhost:1521/ORCL'
 }
-🏃 Running the App
 ```
+🏃 Running the App
 ```bash
 python app.py
-Access at: http://localhost:5000
 ```
+Access at: http://localhost:5000
+
 🔑 Default Users
 Role	Username	Password
 Admin	admin1	hash_admin123
